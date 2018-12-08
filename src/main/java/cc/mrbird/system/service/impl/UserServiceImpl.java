@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import cc.mrbird.common.domain.QueryRequest;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +50,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     }
 
     @Override
-    public List<User> findUserWithDept(User user) {
+    public List<User> findUserWithDept(User user, QueryRequest request) {
         try {
             return this.userMapper.findUserWithDept(user);
         } catch (Exception e) {
@@ -148,13 +150,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @Override
     public UserWithRole findById(Long userId) {
         List<UserWithRole> list = this.userMapper.findUserWithRole(userId);
-        List<Long> roleList = new ArrayList<>();
-        for (UserWithRole uwr : list) {
-            roleList.add(uwr.getRoleId());
-        }
-        if (list.isEmpty()) {
+        List<Long> roleList = list.stream().map(UserWithRole::getRoleId).collect(Collectors.toList());
+        if (list.isEmpty())
             return null;
-        }
         UserWithRole userWithRole = list.get(0);
         userWithRole.setRoleIds(roleList);
         return userWithRole;

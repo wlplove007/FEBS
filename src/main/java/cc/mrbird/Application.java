@@ -1,6 +1,6 @@
 package cc.mrbird;
 
-import cc.mrbird.common.config.FebsProperies;
+import cc.mrbird.common.config.FebsProperties;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @SpringBootApplication
 @EnableTransactionManagement
 @MapperScan("cc.mrbird.*.dao")
-@EnableConfigurationProperties({FebsProperies.class})
+@EnableConfigurationProperties({FebsProperties.class})
 @EnableCaching
 @EnableAsync
 public class Application {
@@ -26,6 +26,6 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        log.info("FEBS started up successfully at {} {}", LocalDate.now(), LocalTime.now());
+        log.info("《《《《《《 FEBS started up successfully at {} {} 》》》》》》", LocalDate.now(), LocalTime.now());
     }
 }

@@ -1,7 +1,7 @@
 package cc.mrbird.system.controller;
 
 import cc.mrbird.common.annotation.Log;
-import cc.mrbird.common.config.FebsProperies;
+import cc.mrbird.common.config.FebsProperties;
 import cc.mrbird.common.controller.BaseController;
 import cc.mrbird.common.domain.ResponseBo;
 import cc.mrbird.common.util.MD5Utils;
@@ -35,7 +35,7 @@ public class LoginController extends BaseController {
     private static final String CODE_KEY = "_code";
 
     @Autowired
-    private FebsProperies febsProperies;
+    private FebsProperties febsProperties;
 
     @Autowired
     private UserService userService;
@@ -53,7 +53,6 @@ public class LoginController extends BaseController {
         }
         Session session = super.getSession();
         String sessionCode = (String) session.getAttribute(CODE_KEY);
-        session.removeAttribute(CODE_KEY);
         if (!code.equalsIgnoreCase(sessionCode)) {
             return ResponseBo.warn("验证码错误！");
         }
@@ -83,11 +82,11 @@ public class LoginController extends BaseController {
             response.setContentType("image/gif");
 
             Captcha captcha = new GifCaptcha(
-                    febsProperies.getValidateCode().getWidth(),
-                    febsProperies.getValidateCode().getHeight(),
-                    febsProperies.getValidateCode().getLength());
-            captcha.out(response.getOutputStream());
+                    febsProperties.getValidateCode().getWidth(),
+                    febsProperties.getValidateCode().getHeight(),
+                    febsProperties.getValidateCode().getLength());
             HttpSession session = request.getSession(true);
+            captcha.out(response.getOutputStream());
             session.removeAttribute(CODE_KEY);
             session.setAttribute(CODE_KEY, captcha.text().toLowerCase());
         } catch (Exception e) {
